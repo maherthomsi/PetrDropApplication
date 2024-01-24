@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 /// Flutter code sample for [NavigationBar].
 
@@ -56,55 +57,70 @@ class _NavigationExampleState extends State<NavigationExample> {
           ),
         ],
       ),
-      body: <Widget>[
-        /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: Text(
-                'Home page',
-                style: theme.textTheme.titleLarge,
-              ),
-            ),
-          ),
-        ),
+      body: SingleChildScrollView(
+         child: Column(
+           mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+             <Widget>[
+               /// Home page
+               Card(
+                 shadowColor: Colors.transparent,
+                 margin: const EdgeInsets.all(8.0),
+                 child: SizedBox(
+                   child: Center(
+                     child: Text(
+                       'Home page',
+                       style: theme.textTheme.titleLarge,
+                     ),
+                   ),
+                 ),
+               ),
 
-        /// Notifications page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
+               /// Notifications page
+               const Padding(
+                 padding: EdgeInsets.all(8.0),
+                 child: Column(
+                   children: <Widget>[
+                     Card(
+                       child: ListTile(
+                         leading: Icon(Icons.notifications_sharp),
+                         title: Text('Notification 1'),
+                         subtitle: Text('This is a notification'),
+                       ),
+                     ),
+                     Card(
+                       child: ListTile(
+                         leading: Icon(Icons.notifications_sharp),
+                         title: Text('Notification 2'),
+                         subtitle: Text('This is a notification'),
+                       ),
+                     ),
+                   ],
+                 ),
+               ),
 
-        /// Map page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: Image.asset('assets/images/ucimap.png'),
-            ),
-          ),
-        ),
-      ][currentPageIndex],
+               /// Map page
+               SizedBox(
+                 width: MediaQuery.of(context).size.width,
+                 height: MediaQuery.of(context).size.height,
+                 child: PhotoView(
+                   imageProvider: const AssetImage("assets/images/ucimap.png"),
+                   backgroundDecoration: const BoxDecoration(
+                     image: DecorationImage(
+                       image: AssetImage("assets/images/background.png"),
+                       fit: BoxFit.cover,
+                     ),
+                   ),
+                   filterQuality: FilterQuality.high,
+                   minScale: PhotoViewComputedScale.covered,
+                   maxScale: PhotoViewComputedScale.covered * 2,
+                   initialScale: PhotoViewComputedScale.covered,
+                 ),
+               ),
+             ][currentPageIndex],
+           ],
+         ),
+       ),
     );
   }
 }
