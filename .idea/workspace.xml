@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="setup flutter environment">
-      <change afterPath="$PROJECT_DIR$/.idea/PetrDropApplication.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" afterDir="false" />
     </list>
@@ -19,6 +17,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2YK0pxGmkN5gU9ugT2PwLAmtuGs" />
   <component name="ProjectLevelVcsManager">
@@ -38,10 +39,23 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "C:/src/flutter/bin/cache/dart-sdk",
-    "settings.editor.selected.configurable": "dart.settings"
+    "io.flutter.reload.alreadyRun": "true",
+    "last_opened_file_path": "C:/Users/maher/StudioProjects/PetrDropApplication",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Dart",
+    "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Android App" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/petr_drop_application/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
