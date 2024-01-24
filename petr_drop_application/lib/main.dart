@@ -45,13 +45,13 @@ class _NavigationExampleState extends State<NavigationExample> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
+            selectedIcon: Icon(Icons.notifications),
+            icon: Badge(child: Icon(Icons.notifications_outlined)),
             label: 'Notifications',
           ),
           NavigationDestination(
-            icon: Badge(
-              child: Icon(Icons.map_sharp),
-            ),
+            selectedIcon: Icon(Icons.map),
+            icon: Badge(child: Icon(Icons.map_outlined)),
             label: 'Map',
           ),
         ],
