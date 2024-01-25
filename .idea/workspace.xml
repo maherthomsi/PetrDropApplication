@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="Added Signatures">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +73,7 @@
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "show.migrate.to.gradle.popup": "false"
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application" />
@@ -151,7 +150,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="maherh/dev" />
                       </list>
                     </value>
                   </entry>
