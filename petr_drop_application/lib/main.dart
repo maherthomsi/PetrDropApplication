@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
-import ''
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-/// Flutter code sample for [NavigationBar].
+const LatLng currentLocation = LatLng(33.6458544, -117.8428335);
 
 void main() => runApp(const NavigationBarApp());
 
@@ -27,6 +26,8 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
+  late GoogleMapController _mapController;
+  Map<String, Marker> _markers = {};
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,6 @@ class _NavigationExampleState extends State<NavigationExample> {
             label: 'Map',
           ),
           NavigationDestination(
-
             selectedIcon: Icon(Icons.notifications),
             icon: Badge(child: Icon(Icons.notifications_outlined)),
             label: 'Notifications',
@@ -60,70 +60,63 @@ class _NavigationExampleState extends State<NavigationExample> {
         ],
       ),
       body: SingleChildScrollView(
-         child: Column(
-           mainAxisAlignment: MainAxisAlignment.start,
-           children: [
-             <Widget>[
-               /// Home page
-               Card(
-                 shadowColor: Colors.transparent,
-                 margin: const EdgeInsets.all(8.0),
-                 child: SizedBox(
-                   child: Center(
-                     child: Text(
-                       'Home page',
-                       style: theme.textTheme.titleLarge,
-                     ),
-                   ),
-                 ),
-               ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            <Widget>[
+              /// Home page
+              Card(
+                shadowColor: Colors.transparent,
+                margin: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  child: Center(
+                    child: Text(
+                      'Home page',
+                      style: theme.textTheme.titleLarge,
+                    ),
+                  ),
+                ),
+              ),
 
-               /// Map page
-               SizedBox(
-                 width: MediaQuery.of(context).size.width,
-                 height: MediaQuery.of(context).size.height,
-                 child: PhotoView(
-                   imageProvider: const AssetImage("assets/images/ucimap.png"),
-                   backgroundDecoration: const BoxDecoration(
-                     image: DecorationImage(
-                       image: AssetImage("assets/images/background.png"),
-                       fit: BoxFit.cover,
-                     ),
-                   ),
-                   filterQuality: FilterQuality.high,
-                   minScale: PhotoViewComputedScale.covered,
-                   maxScale: PhotoViewComputedScale.covered * 2,
-                   initialScale: PhotoViewComputedScale.covered,
-                 ),
-               ),
+              /// Map page
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: GoogleMap(
+                    initialCameraPosition: const CameraPosition(
+                      target: currentLocation,
+                      zoom: 16,
+                    ),
+                    onMapCreated: (controller) {},
+                  )),
 
-               /// Notifications page
-               const Padding(
-                 padding: EdgeInsets.all(8.0),
-                 child: Column(
-                   children: <Widget>[
-                     Card(
-                       child: ListTile(
-                         leading: Icon(Icons.notifications_sharp),
-                         title: Text('Notification 1'),
-                         subtitle: Text('This is a notification'),
-                       ),
-                     ),
-                     Card(
-                       child: ListTile(
-                         leading: Icon(Icons.notifications_sharp),
-                         title: Text('Notification 2'),
-                         subtitle: Text('This is a notification'),
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-
-             ][currentPageIndex],
-           ],
-         ),
-       ),
+              /// Notifications page
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    Card(
+                      child: ListTile(
+                        leading: Icon(Icons.notifications_sharp),
+                        title: Text('Notification 1'),
+                        subtitle: Text('This is a notification'),
+                      ),
+                    ),
+                    Card(
+                      child: ListTile(
+                        leading: Icon(Icons.notifications_sharp),
+                        title: Text('Notification 2'),
+                        subtitle: Text('This is a notification'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ][currentPageIndex],
+          ],
+        ),
+      ),
     );
   }
 }
+
