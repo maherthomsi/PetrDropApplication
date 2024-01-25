@@ -3,8 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 const LatLng currentLocation = LatLng(33.6458544, -117.8428335);
 
-/// Flutter code sample for [NavigationBar].
-
 void main() => runApp(const NavigationBarApp());
 
 class NavigationBarApp extends StatelessWidget {
@@ -121,3 +119,4 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 }
+
