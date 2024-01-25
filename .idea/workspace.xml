@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="Fixed navigation icons not being outlined">
+    <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="Added Zoomable map and a little secret petr ;)">
+      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/petr_drop_application/assets/images/ucimap.png" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/assets/images/ucimap.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/android/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" afterDir="false" />
     </list>
@@ -60,7 +62,7 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/maher/StudioProjects/PetrDropApplication&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Dart&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Other File Types&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
@@ -98,7 +100,14 @@
       <option name="project" value="LOCAL" />
       <updated>1706078341188</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added Zoomable map and a little secret petr ;)">
+      <created>1706084481966</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1706084481966</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,7 +121,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="maher/dev" />
+                        <option value="origin/maher/dev" />
                       </list>
                     </value>
                   </entry>
@@ -128,6 +137,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="setup flutter environment" />
     <MESSAGE value="Fixed navigation icons not being outlined" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed navigation icons not being outlined" />
+    <MESSAGE value="Added Zoomable map and a little secret petr ;)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Zoomable map and a little secret petr ;)" />
   </component>
 </project>
