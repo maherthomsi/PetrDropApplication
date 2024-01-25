@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+// Project By Maher Tarek Homsi, Cameron Bagheri, Sharon Le, and Paul Khayet
+
 const LatLng currentLocation = LatLng(33.6458544, -117.8428335);
 
 void main() => runApp(const NavigationBarApp());
@@ -119,4 +121,3 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 }
-
