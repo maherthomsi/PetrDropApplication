@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import ''
 
 /// Flutter code sample for [NavigationBar].
 
@@ -46,14 +47,15 @@ class _NavigationExampleState extends State<NavigationExample> {
             label: 'Home',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.notifications),
-            icon: Badge(child: Icon(Icons.notifications_outlined)),
-            label: 'Notifications',
-          ),
-          NavigationDestination(
             selectedIcon: Icon(Icons.map),
             icon: Badge(child: Icon(Icons.map_outlined)),
             label: 'Map',
+          ),
+          NavigationDestination(
+
+            selectedIcon: Icon(Icons.notifications),
+            icon: Badge(child: Icon(Icons.notifications_outlined)),
+            label: 'Notifications',
           ),
         ],
       ),
@@ -73,6 +75,25 @@ class _NavigationExampleState extends State<NavigationExample> {
                        style: theme.textTheme.titleLarge,
                      ),
                    ),
+                 ),
+               ),
+
+               /// Map page
+               SizedBox(
+                 width: MediaQuery.of(context).size.width,
+                 height: MediaQuery.of(context).size.height,
+                 child: PhotoView(
+                   imageProvider: const AssetImage("assets/images/ucimap.png"),
+                   backgroundDecoration: const BoxDecoration(
+                     image: DecorationImage(
+                       image: AssetImage("assets/images/background.png"),
+                       fit: BoxFit.cover,
+                     ),
+                   ),
+                   filterQuality: FilterQuality.high,
+                   minScale: PhotoViewComputedScale.covered,
+                   maxScale: PhotoViewComputedScale.covered * 2,
+                   initialScale: PhotoViewComputedScale.covered,
                  ),
                ),
 
@@ -99,24 +120,6 @@ class _NavigationExampleState extends State<NavigationExample> {
                  ),
                ),
 
-               /// Map page
-               SizedBox(
-                 width: MediaQuery.of(context).size.width,
-                 height: MediaQuery.of(context).size.height,
-                 child: PhotoView(
-                   imageProvider: const AssetImage("assets/images/ucimap.png"),
-                   backgroundDecoration: const BoxDecoration(
-                     image: DecorationImage(
-                       image: AssetImage("assets/images/background.png"),
-                       fit: BoxFit.cover,
-                     ),
-                   ),
-                   filterQuality: FilterQuality.high,
-                   minScale: PhotoViewComputedScale.covered,
-                   maxScale: PhotoViewComputedScale.covered * 2,
-                   initialScale: PhotoViewComputedScale.covered,
-                 ),
-               ),
              ][currentPageIndex],
            ],
          ),
