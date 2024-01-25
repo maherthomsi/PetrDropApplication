@@ -4,18 +4,23 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="Added Zoomable map and a little secret petr ;)">
-      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="changes to nav menu and settings">
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/lib/GoogleMaps.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/petr_drop_application/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -50,22 +55,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/maher/StudioProjects/PetrDropApplication&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Other File Types&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "io.flutter.reload.alreadyRun": "true",
+    "last_opened_file_path": "C:/Users/maher/StudioProjects/PetrDropApplication",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application" />
@@ -107,7 +112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1706084481966</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="changes to nav menu and settings">
+      <created>1706144152887</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1706144152887</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -138,6 +150,8 @@
     <MESSAGE value="setup flutter environment" />
     <MESSAGE value="Fixed navigation icons not being outlined" />
     <MESSAGE value="Added Zoomable map and a little secret petr ;)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Zoomable map and a little secret petr ;)" />
+    <MESSAGE value="changes to nav menu" />
+    <MESSAGE value="changes to nav menu and settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="changes to nav menu and settings" />
   </component>
 </project>
