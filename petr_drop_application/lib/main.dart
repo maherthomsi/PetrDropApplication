@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-/// Flutter code sample for [NavigationBar].
-
 void main() => runApp(const NavigationBarApp());
 
 class NavigationBarApp extends StatelessWidget {
@@ -124,3 +122,4 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 }
+
