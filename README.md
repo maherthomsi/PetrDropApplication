@@ -1,2 +1,0 @@
-# PetrDropApplication
-Petr Drop Application
