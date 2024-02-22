@@ -1,13 +1,26 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'firebase_options.dart';
+
 // Project By Maher Tarek Homsi, Cameron Bagheri, Sharon Le, and Paul Khayet
 
 const LatLng currentLocation = LatLng(33.6458544, -117.8428335);
 
-void main() => runApp(const NavigationBarApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(const NavigationBarApp());
+}
 
 class NavigationBarApp extends StatelessWidget {
   const NavigationBarApp({super.key});
@@ -32,9 +45,19 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   late GoogleMapController _mapController;
   Map<String, Marker> _markers = {};
+  late FirebaseFirestore _firestore;
+
+  @override
+  void initState() {
+    super.initState();
+    _firestore = FirebaseFirestore.instance; // Initialize FirebaseFirestore
+    create();
+  }
 
   @override
   Widget build(BuildContext context) {
+    readAll();
+    clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
@@ -96,7 +119,9 @@ class _NavigationExampleState extends State<NavigationExample> {
                       target: currentLocation,
                       zoom: 16,
                     ),
-                    onMapCreated: (controller) {},
+                    onMapCreated: (controller) {
+                      _mapController = controller;
+                    },
                   )),
 
               /// Notifications page
@@ -126,5 +151,83 @@ class _NavigationExampleState extends State<NavigationExample> {
         ),
       ),
     );
+  }
+
+  void create() {
+    final DateTime now = DateTime.now();
+    final sticker = <String, dynamic>{
+      "id": "1",
+      "lat": 33.6458544,
+      "lon": -117.8428335,
+      "dateTime": FieldValue.serverTimestamp(), // Use server timestamp
+    };
+
+// Add a new document with a generated ID
+    _firestore.collection("drops").add(sticker).then((DocumentReference doc) =>
+        log('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+
+  Future<void> readAll() async {
+    await _firestore.collection("drops").get().then((event) {
+      for (var doc in event.docs) {
+        log("${doc.id} => ${doc.data()}");
+      }
+    });
+  }
+
+  void fetchUserById(String userId) async {
+    try {
+      // Retrieve a specific document based on the provided doc.id
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection("users").doc(userId).get();
+
+      if (userSnapshot.exists) {
+        // Document exists, print its data
+        log("${userSnapshot.id} => ${userSnapshot.data()}");
+      } else {
+        // Document doesn't exist
+        log("Document with ID $userId does not exist.");
+      }
+    } catch (e) {
+      // Handle any errors that might occur during the process
+      log("Error fetching user: $e");
+    }
+  }
+
+  void clearStickerAfterDate() async {
+    log("ClearStickerAfterDate entered!");
+    CollectionReference dropsCollection = _firestore
+        .collection('drops'); // Replace with your actual collection name
+
+    try {
+      // Retrieve all documents in the collection
+      QuerySnapshot querySnapshot = await dropsCollection.get();
+
+      // Get the current date and time
+      DateTime currentDate = DateTime.now();
+
+      // Iterate through the documents
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        // Check if the document has a 'dateTime' field
+        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+        if (data != null &&
+            data.containsKey('dateTime') &&
+            data['dateTime'] != null) {
+          // Parse the 'dateTime' field to a DateTime object
+          DateTime documentDateTime = data['dateTime'].toDate();
+
+          // Check if the current date is 1 day past the document's 'dateTime'
+          if (currentDate.isAfter(documentDateTime.add(Duration(days: 1)))) {
+            // Delete the document
+            await dropsCollection.doc(doc.id).delete();
+            log('Document ${doc.id} deleted.');
+          }
+        }
+      }
+    } catch (e) {
+      // Handle any errors that might occur during the process
+      log("Error clearing stickers: $e");
+    }
   }
 }

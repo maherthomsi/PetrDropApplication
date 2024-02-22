@@ -4,27 +4,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="Added Signatures">
+    <list default="true" id="d586d2ff-e5a1-4b9a-8147-ee72d72add04" name="Changes" comment="Firebase added:  create() and readAll() verified to work.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Dart File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -33,12 +22,6 @@
   }
 }</component>
   <component name="GithubPullRequestsUISettings">
-    <option name="recentNewPullRequestHead">
-      <RepoCoordinatesHolder>
-        <option name="owner" value="maherthomsi" />
-        <option name="repository" value="PetrDropApplication" />
-      </RepoCoordinatesHolder>
-    </option>
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
         <option name="accountId" value="00fff553-55ae-40a1-9739-a10e9866678e" />
@@ -49,94 +32,65 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2YK0pxGmkN5gU9ugT2PwLAmtuGs" />
+  <component name="ProjectId" id="2choqoUmT87H17Ki6Sok92SoyCW" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cidr.known.project.marker": "true",
-    "com.android.tools.idea.devicemanager.tab": "Physical",
     "dart.analysis.tool.window.visible": "false",
     "io.flutter.reload.alreadyRun": "true",
-    "last_opened_file_path": "C:/Users/maher/StudioProjects/PetrDropApplication",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="Android App" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <configuration name="Unnamed" type="FlutterRunConfigurationType" factoryName="Flutter" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/petr_drop_application/lib/main.dart" />
       <method v="2" />
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="b41f7372-5bc3-4084-9281-0d5e7565c6b7" name="Changes" comment="" />
-      <created>1700259149632</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1700259149632</updated>
-    </task>
-    <task id="LOCAL-00001" summary="setup flutter environment">
-      <created>1700259351747</created>
+    <task id="LOCAL-00001" summary="refactor changes">
+      <created>1708572830866</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1700259351747</updated>
+      <updated>1708572830866</updated>
     </task>
-    <task id="LOCAL-00002" summary="Fixed navigation icons not being outlined">
-      <created>1706078341188</created>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d586d2ff-e5a1-4b9a-8147-ee72d72add04" name="Changes" comment="refactor changes" />
+      <created>1708573367793</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1708573367793</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Firebase added:  create() and readAll() verified to work.">
+      <created>1708582087529</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1706078341188</updated>
+      <updated>1708582087529</updated>
     </task>
-    <task id="LOCAL-00003" summary="Added Zoomable map and a little secret petr ;)">
-      <created>1706084481966</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1706084481966</updated>
-    </task>
-    <task id="LOCAL-00004" summary="changes to nav menu and settings">
-      <created>1706144152887</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1706144152887</updated>
-    </task>
-    <task id="LOCAL-00005" summary="WIP GoogleMaps API">
-      <created>1706148429803</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1706148429803</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Added Signatures">
-      <created>1706153807031</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1706153807031</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -150,7 +104,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="maherh/dev" />
+                        <option value="maher/dev" />
                       </list>
                     </value>
                   </entry>
@@ -163,14 +117,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="setup flutter environment" />
-    <MESSAGE value="Fixed navigation icons not being outlined" />
-    <MESSAGE value="Added Zoomable map and a little secret petr ;)" />
-    <MESSAGE value="changes to nav menu" />
-    <MESSAGE value="changes to nav menu and settings" />
-    <MESSAGE value="WIP GoogleMaps API" />
-    <MESSAGE value="Added Signatures" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Signatures" />
+    <MESSAGE value="refactor changes" />
+    <MESSAGE value="Firebase added:  create() and readAll() verified to work." />
+    <option name="LAST_COMMIT_MESSAGE" value="Firebase added:  create() and readAll() verified to work." />
   </component>
 </project>
