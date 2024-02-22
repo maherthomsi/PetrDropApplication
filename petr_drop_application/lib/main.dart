@@ -57,6 +57,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   Widget build(BuildContext context) {
     readAll();
+    clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
@@ -158,7 +159,7 @@ class _NavigationExampleState extends State<NavigationExample> {
       "id": "1",
       "lat": 33.6458544,
       "lon": -117.8428335,
-      "dateTime": now.toUtc().toIso8601String(), // Adding dateTime field
+      "dateTime": FieldValue.serverTimestamp(), // Use server timestamp
     };
 
 // Add a new document with a generated ID
@@ -194,6 +195,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   }
 
   void clearStickerAfterDate() async {
+    log("ClearStickerAfterDate entered!");
     CollectionReference dropsCollection = _firestore
         .collection('drops'); // Replace with your actual collection name
 
@@ -209,7 +211,9 @@ class _NavigationExampleState extends State<NavigationExample> {
         // Check if the document has a 'dateTime' field
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
-        if (data != null && data.containsKey('dateTime')) {
+        if (data != null &&
+            data.containsKey('dateTime') &&
+            data['dateTime'] != null) {
           // Parse the 'dateTime' field to a DateTime object
           DateTime documentDateTime = data['dateTime'].toDate();
 
