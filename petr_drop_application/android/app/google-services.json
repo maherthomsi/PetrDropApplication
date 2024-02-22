@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "635414448004",
+    "project_id": "petrdrop-284dd",
+    "storage_bucket": "petrdrop-284dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635414448004:android:fe56cd881909a6a5183fd1",
+        "android_client_info": {
+          "package_name": "com.example.petr_drop_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJZc0qf8SfP_jBySIebBIhjp4fe_gFCLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
