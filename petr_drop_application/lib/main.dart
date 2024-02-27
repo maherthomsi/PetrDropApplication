@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,16 +43,29 @@ class NavigationExample extends StatefulWidget {
 }
 
 class _NavigationExampleState extends State<NavigationExample> {
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+
+  void addCustomIcon() {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), "assets/images/petrmarker.png")
+        .then(
+      (icon) {
+        setState(() {
+          markerIcon = icon;
+        });
+      },
+    );
+  }
+
   int currentPageIndex = 0;
   late GoogleMapController _mapController;
-  Map<String, Marker> _markers = {};
   late FirebaseFirestore _firestore;
 
   @override
   void initState() {
     super.initState();
     _firestore = FirebaseFirestore.instance; // Initialize FirebaseFirestore
-    create();
+    addCustomIcon();
   }
 
   @override
@@ -121,6 +135,15 @@ class _NavigationExampleState extends State<NavigationExample> {
                     ),
                     onMapCreated: (controller) {
                       _mapController = controller;
+                    },
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId("1"),
+                        position: currentLocation,
+                        draggable: true,
+                        onDragEnd: (value) {},
+                        icon: markerIcon,
+                      )
                     },
                   )),
 
