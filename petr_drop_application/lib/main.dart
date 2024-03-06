@@ -181,13 +181,13 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  void create(/*String id, double lat, double lon, Timestamp dateTime*/) {
+  void create(String id, double lat, double lon, Timestamp dateTime) {
     final DateTime now = DateTime.now();
     final sticker = <String, dynamic>{
-      "id": "sticker name",
-      "lat": 33.6458544,
-      "lon": -117.8428335,
-      "dateTime": Timestamp.fromDate(DateTime.now()),
+      "id": id,
+      "lat": lat,
+      "lon": lon,
+      "dateTime": Timestamp.fromDate(DateTime.now()), // Use server timestamp
     };
 
 // Add a new document with a generated ID
