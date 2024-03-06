@@ -106,18 +106,33 @@ class _NavigationExampleState extends State<NavigationExample> {
           children: [
             <Widget>[
               /// Home page
-              Card(
-                shadowColor: Colors.transparent,
-                margin: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  child: Center(
-                    child: Text(
-                      'Home page',
-                      style: theme.textTheme.titleLarge,
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    initialCameraPosition: const CameraPosition(
+                      target: currentLocation,
+                      zoom: 16,
                     ),
-                  ),
-                ),
-              ),
+                    onMapCreated: (controller) {
+                      _mapController = controller;
+                    },
+                    markers: {
+                      Marker(
+                          onTap: () {
+                            print('Tapped');
+                          },
+                          draggable: true,
+                          markerId: MarkerId('Marker'),
+                          position: LatLng(currentLocation.latitude,
+                              currentLocation.longitude),
+                          onDragEnd: ((newPosition) {
+                            print(newPosition.latitude);
+                            print(newPosition.longitude);
+                          }))
+                    },
+                  )),
 
               /// Map page
               SizedBox(
@@ -129,6 +144,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                           () => EagerGestureRecognizer())
                     },
                     mapType: MapType.normal,
+                    zoomControlsEnabled: false,
                     initialCameraPosition: const CameraPosition(
                       target: currentLocation,
                       zoom: 16,
@@ -176,13 +192,13 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  void create() {
+  void create(String id, double lat, double lon, Timestamp dateTime) {
     final DateTime now = DateTime.now();
     final sticker = <String, dynamic>{
       "id": "1",
       "lat": 33.6458544,
       "lon": -117.8428335,
-      "dateTime": FieldValue.serverTimestamp(), // Use server timestamp
+      "dateTime": Timestamp.fromDate(DateTime.now()), // Use server timestamp
     };
 
 // Add a new document with a generated ID
