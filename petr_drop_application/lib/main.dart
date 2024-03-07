@@ -25,7 +25,7 @@ void main() async {
 }
 
 class NavigationBarApp extends StatelessWidget {
-  const NavigationBarApp({super.key});
+  const NavigationBarApp({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class NavigationBarApp extends StatelessWidget {
 }
 
 class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
+  const NavigationExample({Key? key});
 
   @override
   State<NavigationExample> createState() => _NavigationExampleState();
@@ -48,9 +48,9 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "assets/images/petrmarker.png")
+        const ImageConfiguration(), "assets/images/petrmarker.png")
         .then(
-      (icon) {
+          (icon) {
         setState(() {
           markerIcon = icon;
         });
@@ -64,11 +64,18 @@ class _NavigationExampleState extends State<NavigationExample> {
   bool _isLoading = false;
   List<Card> cardsList = [];
 
+  // Define variables to hold the latitude and longitude
+  late double latitude;
+  late double longitude;
+
   @override
   void initState() {
     super.initState();
     _firestore = FirebaseFirestore.instance; // Initialize FirebaseFirestore
     addCustomIcon();
+    // Initialize latitude and longitude with default values
+    latitude = currentLocation.latitude;
+    longitude = currentLocation.longitude;
   }
 
   @override
@@ -78,67 +85,112 @@ class _NavigationExampleState extends State<NavigationExample> {
     clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: Colors.amber,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.map),
-            icon: Badge(child: Icon(Icons.map_outlined)),
-            label: 'Map',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.notifications),
-            icon: Badge(child: Icon(Icons.notifications_outlined)),
-            label: 'Notifications',
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            <Widget>[
-              /// Home page
+            if (currentPageIndex == 0) // Display only for the Home page
               SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: GoogleMap(
-                    mapType: MapType.normal,
-                    initialCameraPosition: const CameraPosition(
-                      target: currentLocation,
-                      zoom: 16,
-                    ),
-                    onMapCreated: (controller) {
-                      _mapController = controller;
-                    },
-                    markers: {
-                      Marker(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      mapType: MapType.normal,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(latitude, longitude), // Use latitude and longitude variables
+                        zoom: 16,
+                      ),
+                      onMapCreated: (controller) {
+                        _mapController = controller;
+                      },
+                      markers: {
+                        Marker(
                           onTap: () {
                             print('Tapped');
                           },
                           draggable: true,
                           markerId: MarkerId('Marker'),
-                          position: LatLng(currentLocation.latitude,
-                              currentLocation.longitude),
+                          position: LatLng(latitude, longitude), // Use latitude and longitude variables
                           onDragEnd: ((newPosition) {
+                            // Update latitude and longitude when dragging ends
+                            setState(() {
+                              latitude = newPosition.latitude;
+                              longitude = newPosition.longitude;
+                            });
                             print(newPosition.latitude);
                             print(newPosition.longitude);
-                          }))
-                    },
-                  )),
-
-              /// Map page
+                          }),
+                        ),
+                      },
+                    ),
+                    Positioned(
+                      bottom: 80.0, // Adjusted position to raise it higher
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.white, // Set the background color here
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Enter Name',
+                                border: OutlineInputBorder(),
+                              ),
+                              onChanged: (value) {
+                                // Handle name changes here
+                                print('Name changed: $value');
+                              },
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              'Latitude: ${latitude.toStringAsFixed(6)}, Longitude: ${longitude.toStringAsFixed(6)}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Enter Date',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (value) {
+                                      // Handle date changes here
+                                      print('Date changed: $value');
+                                    },
+                                  ),
+                                ),
+                                SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Enter Time',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (value) {
+                                      // Handle time changes here
+                                      print('Time changed: $value');
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (currentPageIndex == 1) // Display only for the Map page
               SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
@@ -174,9 +226,34 @@ class _NavigationExampleState extends State<NavigationExample> {
                     )
                 ),
               ),
-            ][currentPageIndex],
           ],
         ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Colors.amber,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            selectedIcon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.map),
+            icon: Badge(child: Icon(Icons.map_outlined)),
+            label: 'Map',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.notifications),
+            icon: Badge(child: Icon(Icons.notifications_outlined)),
+            label: 'Notifications',
+          ),
+        ],
       ),
     );
   }
@@ -190,7 +267,7 @@ class _NavigationExampleState extends State<NavigationExample> {
       "dateTime": Timestamp.fromDate(DateTime.now()), // Use server timestamp
     };
 
-// Add a new document with a generated ID
+    // Add a new document with a generated ID
     _firestore.collection("drops").add(sticker).then((DocumentReference doc) =>
         log('DocumentSnapshot added with ID: ${doc.id}'));
   }
@@ -250,7 +327,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   void fetchUserById(String userId) async {
     try {
       DocumentSnapshot userSnapshot =
-          await _firestore.collection("users").doc(userId).get();
+      await _firestore.collection("users").doc(userId).get();
 
       if (userSnapshot.exists) {
         log("${userSnapshot.id} => ${userSnapshot.data()}");
