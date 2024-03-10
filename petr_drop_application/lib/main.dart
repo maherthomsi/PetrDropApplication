@@ -13,13 +13,13 @@ import 'firebase_options.dart';
 // Project By Maher Tarek Homsi, Cameron Bagheri, Sharon Le, and Paul Khayet
 
 const LatLng currentLocation = LatLng(33.6458544, -117.8428335);
+Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const NavigationBarApp());
 }
 
@@ -152,15 +152,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                     onMapCreated: (controller) {
                       _mapController = controller;
                     },
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId("1"),
-                        position: currentLocation,
-                        draggable: true,
-                        onDragEnd: (value) {},
-                        icon: markerIcon,
-                      )
-                    },
+                    markers: Set<Marker>.of(markers.values),
                   )),
 
               /// Notifications page
@@ -192,13 +184,13 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  void create(String id, double lat, double lon, Timestamp dateTime) {
+  void create(/*String id, double lat, double lon, Timestamp dateTime*/) {
     final DateTime now = DateTime.now();
     final sticker = <String, dynamic>{
-      "id": "1",
+      "id": "sticker name",
       "lat": 33.6458544,
       "lon": -117.8428335,
-      "dateTime": Timestamp.fromDate(DateTime.now()), // Use server timestamp
+      "dateTime": Timestamp.fromDate(DateTime.now()),
     };
 
 // Add a new document with a generated ID
@@ -209,64 +201,124 @@ class _NavigationExampleState extends State<NavigationExample> {
   Future<void> readAll() async {
     await _firestore.collection("drops").get().then((event) {
       for (var doc in event.docs) {
-        log("${doc.id} => ${doc.data()}");
+        //log("${doc.id} => ${doc.data()}");
+        String documentId = getDocumentId(doc);
+        double latitude = getLatitude(doc);
+        double longitude = getLongitude(doc);
+        DateTime dateTime = getDateTime(doc).toDate();
+        DateTime currentDate = DateTime.now();
+
+        markers.clear();
+        if (currentDate.isAfter(dateTime)) {
+          _add(documentId, latitude, longitude);
+        }
       }
     });
   }
 
   void fetchUserById(String userId) async {
     try {
-      // Retrieve a specific document based on the provided doc.id
       DocumentSnapshot userSnapshot =
           await _firestore.collection("users").doc(userId).get();
 
       if (userSnapshot.exists) {
-        // Document exists, print its data
         log("${userSnapshot.id} => ${userSnapshot.data()}");
       } else {
-        // Document doesn't exist
         log("Document with ID $userId does not exist.");
       }
     } catch (e) {
-      // Handle any errors that might occur during the process
       log("Error fetching user: $e");
     }
   }
 
   void clearStickerAfterDate() async {
-    log("ClearStickerAfterDate entered!");
-    CollectionReference dropsCollection = _firestore
-        .collection('drops'); // Replace with your actual collection name
+    //log("ClearStickerAfterDate entered!");
+    CollectionReference dropsCollection = _firestore.collection('drops');
 
     try {
-      // Retrieve all documents in the collection
       QuerySnapshot querySnapshot = await dropsCollection.get();
 
-      // Get the current date and time
       DateTime currentDate = DateTime.now();
 
-      // Iterate through the documents
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        // Check if the document has a 'dateTime' field
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
         if (data != null &&
             data.containsKey('dateTime') &&
             data['dateTime'] != null) {
-          // Parse the 'dateTime' field to a DateTime object
           DateTime documentDateTime = data['dateTime'].toDate();
+          //log("dateTime = $documentDateTime");
 
           // Check if the current date is 1 day past the document's 'dateTime'
-          if (currentDate.isAfter(documentDateTime.add(Duration(days: 1)))) {
-            // Delete the document
-            await dropsCollection.doc(doc.id).delete();
+          if (currentDate
+              .isAfter(documentDateTime.add(const Duration(days: 1)))) {
             log('Document ${doc.id} deleted.');
+            await dropsCollection.doc(doc.id).delete();
           }
         }
       }
     } catch (e) {
-      // Handle any errors that might occur during the process
       log("Error clearing stickers: $e");
     }
+  }
+
+  String getDocumentId(DocumentSnapshot documentSnapshot) {
+    return documentSnapshot.id;
+  }
+
+  double getLatitude(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data.containsKey('lat')) {
+      return data['lat'] as double;
+    }
+
+    return 0.0;
+  }
+
+  double getLongitude(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data.containsKey('lon')) {
+      return data['lon'] as double;
+    }
+
+    return 0.0;
+  }
+
+  Timestamp getDateTime(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data.containsKey('dateTime')) {
+      return data['dateTime'] as Timestamp;
+    }
+
+    return Timestamp.fromDate(DateTime.now());
+  }
+
+  void _add(id, lat, lon) {
+    var markerIdVal = id;
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    // creating a new MARKER
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(
+        lat,
+        lon,
+      ),
+      infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      onTap: () {},
+    );
+
+    setState(() {
+      // adding a new marker to map
+      markers[markerId] = marker;
+      //log("markers = $markers");
+      //log("added marker $id");
+    });
   }
 }
