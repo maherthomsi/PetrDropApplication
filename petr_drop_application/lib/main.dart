@@ -221,21 +221,19 @@ class _NavigationExampleState extends State<NavigationExample> {
                     markers: Set<Marker>.of(markers.values),
                   )),
 
-              /// Notifications page
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
+            /// Notifications page
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child:
-                    ListView.builder(
-                      itemCount: cardsList.length,
-                      itemBuilder: (context, index) {
-                        return cardsList[index];
-                      },
-                    )
-                ),
-              ),
+                  child: ListView.builder(
+                    itemCount: cardsList.length,
+                    itemBuilder: (context, index) {
+                      return cardsList[index];
+                    },
+                  )),
+            ),
           ],
         ),
       ),
@@ -284,16 +282,12 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   Future<void> updateCards() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
-    await _firestore.collection("drops").get();
+        await _firestore.collection("drops").get();
 
     List<Card> cards = [];
     for (var doc in snapshot.docs) {
-      print("Here");
       String documentId = getDocumentId(doc);
-      double latitude = getLatitude(doc);
-      double longitude = getLongitude(doc);
       DateTime dateTime = getDateTime(doc).toDate();
-      DateTime currentDate = DateTime.now();
 
       // Formatting date and time
       String formattedDateTime = DateFormat.yMMMd().add_jms().format(dateTime);
@@ -318,6 +312,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   Future<void> readAll() async {
     await _firestore.collection("drops").get().then((event) {
+      markers.clear();
       for (var doc in event.docs) {
         //log("${doc.id} => ${doc.data()}");
         String documentId = getDocumentId(doc);
@@ -326,7 +321,6 @@ class _NavigationExampleState extends State<NavigationExample> {
         DateTime dateTime = getDateTime(doc).toDate();
         DateTime currentDate = DateTime.now();
 
-        markers.clear();
         if (currentDate.isAfter(dateTime)) {
           _add(documentId, latitude, longitude);
         }
@@ -382,14 +376,13 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   String getDocumentId(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic>? data =
-    documentSnapshot.data() as Map<String, dynamic>?;
+        documentSnapshot.data() as Map<String, dynamic>?;
 
     if (data != null && data.containsKey('id')) {
       return data['id'] as String;
     }
 
     return 'Error';
-
   }
 
   double getLatitude(DocumentSnapshot documentSnapshot) {
