@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'firebase_options.dart';
 
@@ -60,6 +61,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   late GoogleMapController _mapController;
   late FirebaseFirestore _firestore;
+  bool _isLoading = false;
+  List<Card> cardsList = [];
 
   @override
   void initState() {
@@ -71,6 +74,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   Widget build(BuildContext context) {
     readAll();
+    updateCards();
     clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -156,25 +160,18 @@ class _NavigationExampleState extends State<NavigationExample> {
                   )),
 
               /// Notifications page
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      child: ListTile(
-                        leading: Icon(Icons.notifications_sharp),
-                        title: Text('Notification 1'),
-                        subtitle: Text('This is a notification'),
-                      ),
-                    ),
-                    Card(
-                      child: ListTile(
-                        leading: Icon(Icons.notifications_sharp),
-                        title: Text('Notification 2'),
-                        subtitle: Text('This is a notification'),
-                      ),
-                    ),
-                  ],
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child:
+                    ListView.builder(
+                      itemCount: cardsList.length,
+                      itemBuilder: (context, index) {
+                        return cardsList[index];
+                      },
+                    )
                 ),
               ),
             ][currentPageIndex],
@@ -196,6 +193,40 @@ class _NavigationExampleState extends State<NavigationExample> {
 // Add a new document with a generated ID
     _firestore.collection("drops").add(sticker).then((DocumentReference doc) =>
         log('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+
+  Future<void> updateCards() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+    await _firestore.collection("drops").get();
+
+    List<Card> cards = [];
+    for (var doc in snapshot.docs) {
+      print("Here");
+      String documentId = getDocumentId(doc);
+      double latitude = getLatitude(doc);
+      double longitude = getLongitude(doc);
+      DateTime dateTime = getDateTime(doc).toDate();
+      DateTime currentDate = DateTime.now();
+
+      // Formatting date and time
+      String formattedDateTime = DateFormat.yMMMd().add_jms().format(dateTime);
+
+      // Creating a Card for each document
+      if (documentId != 'Error') {
+        Card card = Card(
+          child: ListTile(
+            leading: Image.asset('assets/images/petr.png'),
+            title: Text('Petr Name: $documentId'),
+            subtitle: Text('Date and Time: $formattedDateTime'),
+          ),
+        );
+
+        cards.add(card); // Add the card to the list
+      }
+    }
+    setState(() {
+      cardsList = cards; // Update the state with the new list of cards
+    });
   }
 
   Future<void> readAll() async {
@@ -263,7 +294,15 @@ class _NavigationExampleState extends State<NavigationExample> {
   }
 
   String getDocumentId(DocumentSnapshot documentSnapshot) {
-    return documentSnapshot.id;
+    Map<String, dynamic>? data =
+    documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data.containsKey('id')) {
+      return data['id'] as String;
+    }
+
+    return 'Error';
+
   }
 
   double getLatitude(DocumentSnapshot documentSnapshot) {
