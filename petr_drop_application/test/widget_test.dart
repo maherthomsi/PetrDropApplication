@@ -1,30 +1,69 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:petr_drop_application/main.dart';
+import 'package:petr_drop_application/main.dart'; // Import your main file
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  test('Test create method', () async {
+    await Firebase.initializeApp(); // Initialize Firebase
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Replace with test values
+    const double testLat = 37.7749;
+    const double testLon = -122.4194;
+    const String testId = 'testId';
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await create(testId, testLat, testLon, Timestamp.fromDate(DateTime.now()));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the document is created
+    final DocumentSnapshot document =
+        await firestore.collection('drops').doc(testId).get();
+    expect(document.exists, true);
+  });
+
+  test('Test readAll method', () async {
+    await Firebase.initializeApp(); // Initialize Firebase
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Replace with test values
+    final double testLat = 37.7749;
+    final double testLon = -122.4194;
+    final String testId = 'testId';
+
+    await create(testId, testLat, testLon, Timestamp.fromDate(DateTime.now()));
+
+    // Call readAll method and verify that it fetches data
+    await readAll();
+
+    // You can add more specific assertions based on your application logic
+    expect(cardsList.length, greaterThanOrEqualTo(1));
+  });
+
+  test('Test fetchUserById method', () async {
+    await Firebase.initializeApp(); // Initialize Firebase
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Replace with test values
+    final String userId = 'testUserId';
+
+    // Call fetchUserById method and verify that it fetches user data
+    await fetchUserById(userId);
+
+    // Add specific assertions based on your application logic
+    // For example, check if the fetched user data is correct
+  });
+
+  tearDown(() async {
+    // Cleanup - delete the documents created during testing
+    await Firebase.initializeApp(); // Initialize Firebase
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Replace with the IDs of the documents created during testing
+    final List<String> testDocumentIds = ['testId'];
+
+    for (final String documentId in testDocumentIds) {
+      await firestore.collection('drops').doc(documentId).delete();
+    }
   });
 }
