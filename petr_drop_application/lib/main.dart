@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -9,12 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
-import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-
 import 'firebase_options.dart';
-
-
 
 // Project By Maher Tarek Homsi, Cameron Bagheri, Sharon Le, and Paul Khayet
 
@@ -53,9 +49,9 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), "assets/images/petrmarker.png")
+            const ImageConfiguration(), "assets/images/petrmarker.png")
         .then(
-          (icon) {
+      (icon) {
         setState(() {
           markerIcon = icon;
         });
@@ -105,7 +101,8 @@ class _NavigationExampleState extends State<NavigationExample> {
                     GoogleMap(
                       mapType: MapType.normal,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(latitude, longitude), // Use latitude and longitude variables
+                        target: LatLng(latitude,
+                            longitude), // Use latitude and longitude variables
                         zoom: 16,
                       ),
                       onMapCreated: (controller) {
@@ -118,7 +115,8 @@ class _NavigationExampleState extends State<NavigationExample> {
                           },
                           draggable: true,
                           markerId: MarkerId('Marker'),
-                          position: LatLng(latitude, longitude), // Use latitude and longitude variables
+                          position: LatLng(latitude,
+                              longitude), // Use latitude and longitude variables
                           onDragEnd: ((newPosition) {
                             // Update latitude and longitude when dragging ends
                             setState(() {
@@ -165,12 +163,14 @@ class _NavigationExampleState extends State<NavigationExample> {
                               children: [
                                 Expanded(
                                   child: DateTimeField(
+                                    initialValue: DateTime.now(),
                                     format: dateFormat,
                                     onShowPicker: (context, currentValue) {
                                       return showDatePicker(
                                           context: context,
                                           firstDate: DateTime(1900),
-                                          initialDate: currentValue ?? DateTime.now(),
+                                          initialDate:
+                                              currentValue ?? DateTime.now(),
                                           lastDate: DateTime(2100));
                                     },
                                   ),
@@ -178,11 +178,14 @@ class _NavigationExampleState extends State<NavigationExample> {
                                 SizedBox(width: 8.0),
                                 Expanded(
                                   child: DateTimeField(
+                                    initialValue: DateTime.now(),
                                     format: timeFormat,
-                                    onShowPicker: (context, currentValue) async {
+                                    onShowPicker:
+                                        (context, currentValue) async {
                                       final time = await showTimePicker(
                                         context: context,
-                                        initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                                        initialTime: TimeOfDay.fromDateTime(
+                                            currentValue ?? DateTime.now()),
                                       );
                                       return DateTimeField.convert(time);
                                     },
@@ -334,7 +337,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   void fetchUserById(String userId) async {
     try {
       DocumentSnapshot userSnapshot =
-      await _firestore.collection("users").doc(userId).get();
+          await _firestore.collection("users").doc(userId).get();
 
       if (userSnapshot.exists) {
         log("${userSnapshot.id} => ${userSnapshot.data()}");
