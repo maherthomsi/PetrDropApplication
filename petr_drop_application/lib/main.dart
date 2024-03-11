@@ -60,6 +60,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   late GoogleMapController _mapController;
   late FirebaseFirestore _firestore;
+  bool _isLoading = false;
+  List<Card> cardsList = [];
 
   @override
   void initState() {
@@ -160,19 +162,12 @@ class _NavigationExampleState extends State<NavigationExample> {
                 padding: EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-                    FutureBuilder<void>(
-                      future: updateCards(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator(); // Show a loading indicator while fetching data
-                        }
-                        if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        }
-                        // If the future completes successfully, you can return any widget you want here.
-                        return Text('Cards updated successfully!');
+                    ListView.builder(
+                      itemCount: cardsList.length,
+                      itemBuilder: (context, index) {
+                        return cardsList[index];
                       },
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -198,7 +193,10 @@ class _NavigationExampleState extends State<NavigationExample> {
   }
 
   Future<void> updateCards() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore.collection("drops").get();
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection("drops").get();
+
+    List<Card> cards = [];
     for (var doc in snapshot.docs) {
       print("Here");
       String documentId = getDocumentId(doc);
@@ -207,18 +205,21 @@ class _NavigationExampleState extends State<NavigationExample> {
       DateTime dateTime = getDateTime(doc).toDate();
       DateTime currentDate = DateTime.now();
 
-        // Creating a Card for each document
-        Card card = Card(
-          child: ListTile(
-            leading: Image.asset('assets/images/petr.png'),
-            title: Text('Drop Name: $documentId'), // Displaying document ID in the title
-            subtitle: Text('Date and Time: ${dateTime.toString()}'), // Displaying date and time in the subtitle
-          ),
-        );
-        // Now, you can use this card as you need, for example, adding it to a list of cards or displaying it directly.
-        print(card); // For demonstration purposes, you can print the card here.
+      // Creating a Card for each document
+      Card card = Card(
+        child: ListTile(
+          leading: Image.asset('assets/images/petr.png'),
+          title: Text('Drop Name: $documentId'),
+          subtitle: Text('Date and Time: ${dateTime.toString()}'),
+        ),
+      );
 
+      cards.add(card); // Add the card to the list
     }
+
+    setState(() {
+      cardsList = cards; // Update the state with the new list of cards
+    });
   }
 
   Future<void> readAll() async {
