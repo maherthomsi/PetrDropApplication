@@ -156,23 +156,22 @@ class _NavigationExampleState extends State<NavigationExample> {
                   )),
 
               /// Notifications page
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-                    Card(
-                      child: ListTile(
-                        leading: Icon(Icons.notifications_sharp),
-                        title: Text('Notification 1'),
-                        subtitle: Text('This is a notification'),
-                      ),
-                    ),
-                    Card(
-                      child: ListTile(
-                        leading: Icon(Icons.notifications_sharp),
-                        title: Text('Notification 2'),
-                        subtitle: Text('This is a notification'),
-                      ),
+                    FutureBuilder<void>(
+                      future: updateCards(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                        }
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        // If the future completes successfully, you can return any widget you want here.
+                        return Text('Cards updated successfully!');
+                      },
                     ),
                   ],
                 ),
@@ -196,6 +195,30 @@ class _NavigationExampleState extends State<NavigationExample> {
 // Add a new document with a generated ID
     _firestore.collection("drops").add(sticker).then((DocumentReference doc) =>
         log('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+
+  Future<void> updateCards() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore.collection("drops").get();
+    for (var doc in snapshot.docs) {
+      print("Here");
+      String documentId = getDocumentId(doc);
+      double latitude = getLatitude(doc);
+      double longitude = getLongitude(doc);
+      DateTime dateTime = getDateTime(doc).toDate();
+      DateTime currentDate = DateTime.now();
+
+        // Creating a Card for each document
+        Card card = Card(
+          child: ListTile(
+            leading: Image.asset('assets/images/petr.png'),
+            title: Text('Drop Name: $documentId'), // Displaying document ID in the title
+            subtitle: Text('Date and Time: ${dateTime.toString()}'), // Displaying date and time in the subtitle
+          ),
+        );
+        // Now, you can use this card as you need, for example, adding it to a list of cards or displaying it directly.
+        print(card); // For demonstration purposes, you can print the card here.
+
+    }
   }
 
   Future<void> readAll() async {
