@@ -160,15 +160,16 @@ class _NavigationExampleState extends State<NavigationExample> {
               /// Notifications page
               Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child:
                     ListView.builder(
                       itemCount: cardsList.length,
                       itemBuilder: (context, index) {
                         return cardsList[index];
                       },
                     )
-                  ],
                 ),
               ),
             ][currentPageIndex],
