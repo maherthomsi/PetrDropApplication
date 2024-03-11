@@ -9,7 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
+import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+
 import 'firebase_options.dart';
+
+
 
 // Project By Maher Tarek Homsi, Cameron Bagheri, Sharon Le, and Paul Khayet
 
@@ -67,6 +72,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   // Define variables to hold the latitude and longitude
   late double latitude;
   late double longitude;
+  final dateFormat = DateFormat("yyyy-MM-dd");
+  final timeFormat = DateFormat("HH:mm");
 
   @override
   void initState() {
@@ -157,27 +164,27 @@ class _NavigationExampleState extends State<NavigationExample> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Enter Date',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    onChanged: (value) {
-                                      // Handle date changes here
-                                      print('Date changed: $value');
+                                  child: DateTimeField(
+                                    format: dateFormat,
+                                    onShowPicker: (context, currentValue) {
+                                      return showDatePicker(
+                                          context: context,
+                                          firstDate: DateTime(1900),
+                                          initialDate: currentValue ?? DateTime.now(),
+                                          lastDate: DateTime(2100));
                                     },
                                   ),
                                 ),
                                 SizedBox(width: 8.0),
                                 Expanded(
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Enter Time',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    onChanged: (value) {
-                                      // Handle time changes here
-                                      print('Time changed: $value');
+                                  child: DateTimeField(
+                                    format: timeFormat,
+                                    onShowPicker: (context, currentValue) async {
+                                      final time = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                                      );
+                                      return DateTimeField.convert(time);
                                     },
                                   ),
                                 ),
