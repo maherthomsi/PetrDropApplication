@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'firebase_options.dart';
 
@@ -73,6 +74,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   Widget build(BuildContext context) {
     readAll();
+    updateCards();
     clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -195,7 +197,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   Future<void> updateCards() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _firestore.collection("drops").get();
+    await _firestore.collection("drops").get();
 
     List<Card> cards = [];
     for (var doc in snapshot.docs) {
@@ -206,18 +208,22 @@ class _NavigationExampleState extends State<NavigationExample> {
       DateTime dateTime = getDateTime(doc).toDate();
       DateTime currentDate = DateTime.now();
 
+      // Formatting date and time
+      String formattedDateTime = DateFormat.yMMMd().add_jms().format(dateTime);
+
       // Creating a Card for each document
-      Card card = Card(
-        child: ListTile(
-          leading: Image.asset('assets/images/petr.png'),
-          title: Text('Drop Name: $documentId'),
-          subtitle: Text('Date and Time: ${dateTime.toString()}'),
-        ),
-      );
+      if (documentId != 'Error') {
+        Card card = Card(
+          child: ListTile(
+            leading: Image.asset('assets/images/petr.png'),
+            title: Text('Petr Name: $documentId'),
+            subtitle: Text('Date and Time: $formattedDateTime'),
+          ),
+        );
 
-      cards.add(card); // Add the card to the list
+        cards.add(card); // Add the card to the list
+      }
     }
-
     setState(() {
       cardsList = cards; // Update the state with the new list of cards
     });
@@ -288,7 +294,15 @@ class _NavigationExampleState extends State<NavigationExample> {
   }
 
   String getDocumentId(DocumentSnapshot documentSnapshot) {
-    return documentSnapshot.id;
+    Map<String, dynamic>? data =
+    documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data.containsKey('id')) {
+      return data['id'] as String;
+    }
+
+    return 'Error';
+
   }
 
   double getLatitude(DocumentSnapshot documentSnapshot) {
