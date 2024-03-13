@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +26,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (!kDebugMode) {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.appAttest,
+      webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    );
+  } else {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
+    );
+  }
   runApp(const NavigationBarApp());
 }
 
@@ -65,6 +78,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 1;
   late GoogleMapController _mapController;
   late FirebaseFirestore _firestore;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   bool _isLoading = false;
   List<Card> cardsList = [];
   late File _image;
@@ -88,9 +102,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   Widget build(BuildContext context) {
     Future uploadPic(BuildContext context) async {
-      String fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
-      Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child(fileName);
+      String fileName = "${DateTime.now().millisecondsSinceEpoch}.png";
+      Reference firebaseStorageRef = _storage.ref().child(fileName);
       UploadTask uploadTask = firebaseStorageRef.putFile(_image);
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() =>
           ScaffoldMessenger.of(context)
@@ -109,7 +122,6 @@ class _NavigationExampleState extends State<NavigationExample> {
     }
 
     readAll();
-    updateCards();
     clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -267,6 +279,9 @@ class _NavigationExampleState extends State<NavigationExample> {
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
+            if (currentPageIndex == 2) {
+              updateCards();
+            }
           });
         },
         indicatorColor: Colors.amber,
@@ -306,6 +321,21 @@ class _NavigationExampleState extends State<NavigationExample> {
         log('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
+  Future<String?> downloadImage(String filename) async {
+    try {
+      String downloadURL = await FirebaseStorage.instance
+          .ref()
+          .child("petr.png")
+          .getDownloadURL();
+      print("downloadUrl = $downloadURL");
+      return downloadURL;
+    } on FirebaseException catch (e) {
+      print('Error downloading image: $e');
+      // Handle the error appropriately
+      return null;
+    }
+  }
+
   Future<void> updateCards() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection("drops").get();
@@ -320,9 +350,23 @@ class _NavigationExampleState extends State<NavigationExample> {
 
       // Creating a Card for each document
       if (documentId != 'Error') {
+        String imageName = "petr";
+        String? downloadURL = await downloadImage('$imageName.png');
         Card card = Card(
           child: ListTile(
-            leading: Image.asset('assets/images/petr.png'),
+            leading: downloadURL != null
+                ? Image.network(
+                    downloadURL,
+                    width: 50.0, // Set the width as needed
+                    height: 50.0, // Set the height as needed
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    'assets/images/petr.png', // Replace with a placeholder image
+                    width: 50.0,
+                    height: 50.0,
+                    fit: BoxFit.cover,
+                  ),
             title: Text('Petr Name: $documentId'),
             subtitle: Text('Date and Time: $formattedDateTime'),
           ),
