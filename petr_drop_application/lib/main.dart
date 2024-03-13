@@ -59,7 +59,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  int currentPageIndex = 0;
+  int currentPageIndex = 1;
   late GoogleMapController _mapController;
   late FirebaseFirestore _firestore;
   bool _isLoading = false;
@@ -247,19 +247,19 @@ class _NavigationExampleState extends State<NavigationExample> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            selectedIcon: Icon(Icons.add_circle),
+            icon: Icon(Icons.add_circle_outline),
+            label: 'Add Drop',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.map),
-            icon: Badge(child: Icon(Icons.map_outlined)),
+            icon: Icon(Icons.map_outlined),
             label: 'Map',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.notifications),
-            icon: Badge(child: Icon(Icons.notifications_outlined)),
-            label: 'Notifications',
+            icon: Icon(Icons.notifications_outlined),
+            label: 'All Drops',
           ),
         ],
       ),

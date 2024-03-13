@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d586d2ff-e5a1-4b9a-8147-ee72d72add04" name="Changes" comment="Firebase added:  create() and readAll() verified to work.">
+    <list default="true" id="d586d2ff-e5a1-4b9a-8147-ee72d72add04" name="Changes" comment="idfk">
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/petrdropicon-playstore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-anydpi-v26/petrdropicon.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-anydpi-v26/petrdropicon_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-hdpi/petrdropicon.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-hdpi/petrdropicon_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-hdpi/petrdropicon_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-mdpi/petrdropicon.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-mdpi/petrdropicon_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-mdpi/petrdropicon_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xhdpi/petrdropicon.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xhdpi/petrdropicon_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xhdpi/petrdropicon_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xxhdpi/petrdropicon.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xxhdpi/petrdropicon_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xxhdpi/petrdropicon_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xxxhdpi/petrdropicon.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xxxhdpi/petrdropicon_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/mipmap-xxxhdpi/petrdropicon_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/res/values/petrdropicon_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/petr_drop_application/assets/icon/petrdropicon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/ios/Runner/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/petr_drop_application/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="cameron/cambranchII" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -49,6 +91,7 @@
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
     "io.flutter.reload.alreadyRun": "true",
+    "last_opened_file_path": "C:/Users/maher/StudioProjects/PetrDropApplication/petr_drop_application/assets/icon",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
@@ -57,7 +100,11 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application\assets\icon" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application\android\app\src\main\res\icon" />
       <recent name="C:\Users\maher\StudioProjects\PetrDropApplication\petr_drop_application" />
     </key>
   </component>
@@ -90,7 +137,35 @@
       <option name="project" value="LOCAL" />
       <updated>1708582087529</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="cardList">
+      <created>1710126027239</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710126027239</updated>
+    </task>
+    <task id="LOCAL-00004" summary="init state for dateTime fields">
+      <created>1710128709281</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710128709281</updated>
+    </task>
+    <task id="LOCAL-00005" summary="HOTFIX FOR MARKERS">
+      <created>1710130349686</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1710130349686</updated>
+    </task>
+    <task id="LOCAL-00006" summary="idfk">
+      <created>1710134843655</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1710134843655</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -104,7 +179,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="maher/dev" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>
@@ -119,6 +194,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="refactor changes" />
     <MESSAGE value="Firebase added:  create() and readAll() verified to work." />
-    <option name="LAST_COMMIT_MESSAGE" value="Firebase added:  create() and readAll() verified to work." />
+    <MESSAGE value="cardList" />
+    <MESSAGE value="init state for dateTime fields" />
+    <MESSAGE value="HOTFIX FOR MARKERS" />
+    <MESSAGE value="idfk" />
+    <option name="LAST_COMMIT_MESSAGE" value="idfk" />
   </component>
 </project>
