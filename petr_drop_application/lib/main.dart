@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'firebase_options.dart';
@@ -64,6 +67,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   late FirebaseFirestore _firestore;
   bool _isLoading = false;
   List<Card> cardsList = [];
+  late File _image;
 
   // Define variables to hold the latitude and longitude
   late double latitude;
@@ -83,6 +87,27 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
+    Future uploadPic(BuildContext context) async {
+      String fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = firebaseStorageRef.putFile(_image);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() =>
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Image Uploaded"))));
+    }
+
+    Future getImage(BuildContext context) async {
+      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      File file = File(image!.path);
+
+      setState(() {
+        _image = file;
+        print("Image Path ${file.path}");
+        uploadPic(context);
+      });
+    }
+
     readAll();
     updateCards();
     clearStickerAfterDate();
@@ -112,6 +137,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                         Marker(
                           onTap: () {
                             print('Tapped');
+                            getImage(context);
                           },
                           draggable: true,
                           markerId: MarkerId('Marker'),
