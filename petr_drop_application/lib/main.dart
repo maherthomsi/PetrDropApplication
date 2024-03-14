@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +26,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (!kDebugMode) {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.appAttest,
+      webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    );
+  } else {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
+    );
+  }
 
   runApp(const NavigationBarApp());
 }
@@ -89,23 +102,29 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    Future uploadPic(BuildContext context) async {
-      String fileName = "${DateTime.now().millisecondsSinceEpoch}.png";
+    Future uploadPic(BuildContext context, File imageFile) async {
+      String extension = imageFile.path.split('.').last; // Extract extension
+      if (extension != 'png' && extension != 'jpg') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Invalid image format, must be PNG or JPG")));
+        return; // Exit if not PNG or JPG
+      }
+
+      String fileName = "${DateTime.now().millisecondsSinceEpoch}.$extension";
       Reference firebaseStorageRef = _storage.ref().child(fileName);
-      UploadTask uploadTask = firebaseStorageRef.putFile(_image);
-      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() =>
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Image Uploaded"))));
+      UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
+      await uploadTask.whenComplete(() => ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Image Uploaded"))));
     }
 
     Future getImage(BuildContext context) async {
       var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      File file = File(image!.path);
+      if (image == null) return; // Exit if no image selected
+      File file = File(image.path);
 
       setState(() {
         _image = file;
         print("Image Path ${file.path}");
-        uploadPic(context);
       });
     }
 
@@ -137,7 +156,6 @@ class _NavigationExampleState extends State<NavigationExample> {
                         Marker(
                           onTap: () {
                             print('Tapped');
-                            getImage(context);
                           },
                           draggable: true,
                           markerId: MarkerId('Marker'),
@@ -295,13 +313,15 @@ class _NavigationExampleState extends State<NavigationExample> {
     );
   }
 
-  void create(String id, double lat, double lon, Timestamp dateTime) {
+  void create(
+      String id, double lat, double lon, Timestamp dateTime, String image) {
     final DateTime now = DateTime.now();
     final sticker = <String, dynamic>{
       "id": id,
       "lat": lat,
       "lon": lon,
       "dateTime": Timestamp.fromDate(DateTime.now()), // Use server timestamp
+      "image": image,
     };
 
     // Add a new document with a generated ID
@@ -311,10 +331,8 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   Future<String?> downloadImage(String filename) async {
     try {
-      String downloadURL = await FirebaseStorage.instance
-          .ref()
-          .child("petr.png")
-          .getDownloadURL();
+      String downloadURL =
+          await FirebaseStorage.instance.ref().child(filename).getDownloadURL();
       print("downloadUrl = $downloadURL");
       return downloadURL;
     } on FirebaseException catch (e) {
@@ -332,14 +350,15 @@ class _NavigationExampleState extends State<NavigationExample> {
     for (var doc in snapshot.docs) {
       String documentId = getDocumentId(doc);
       DateTime dateTime = getDateTime(doc).toDate();
-
+      String imageName = getImageName(doc);
       // Formatting date and time
       String formattedDateTime = DateFormat.yMMMd().add_jms().format(dateTime);
 
       // Creating a Card for each document
       if (documentId != 'Error') {
-        String imageName = "petr";
-        String? downloadURL = await downloadImage('$imageName.png');
+        print("Grabbed Image with name:$imageName");
+
+        String? downloadURL = await downloadImage(imageName);
         Card card = Card(
           child: ListTile(
             leading: downloadURL != null
@@ -401,6 +420,22 @@ class _NavigationExampleState extends State<NavigationExample> {
     }
   }
 
+  Future<void> deleteFileFromStorage(String filename) async {
+    try {
+      // Get a reference to the file
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child(filename);
+
+      // Delete the file
+      await firebaseStorageRef.delete();
+
+      print('File $filename deleted successfully from Firebase Storage.');
+    } catch (e) {
+      print('Error deleting file $filename: $e');
+      // Handle the error appropriately
+    }
+  }
+
   void clearStickerAfterDate() async {
     //log("ClearStickerAfterDate entered!");
     CollectionReference dropsCollection = _firestore.collection('drops');
@@ -423,6 +458,7 @@ class _NavigationExampleState extends State<NavigationExample> {
           if (currentDate
               .isAfter(documentDateTime.add(const Duration(days: 1)))) {
             log('Document ${doc.id} deleted.');
+            await deleteFileFromStorage("${getImageName(doc)}");
             await dropsCollection.doc(doc.id).delete();
           }
         }
@@ -438,6 +474,19 @@ class _NavigationExampleState extends State<NavigationExample> {
 
     if (data != null && data.containsKey('id')) {
       return data['id'] as String;
+    }
+
+    return 'Error';
+  }
+
+  String getImageName(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data.containsKey('image')) {
+      var image = data['image'] as String;
+      print("Image Name Grabbed:  $image");
+      return image;
     }
 
     return 'Error';
