@@ -34,7 +34,10 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   firebase_core: ^2.24.2
+  firebase_storage: ^11.6.10
+  firebase_app_check: ^0.2.1+18
   cloud_firestore: ^4.14.0
+  image_picker: ^1.0.7
   cached_network_image: ^3.3.1
   http: ^1.1.0
   flutter_inappwebview: ^6.0.0
