@@ -83,11 +83,11 @@ class _NavigationExampleState extends State<NavigationExample> {
   bool _isLoading = false;
   List<Card> cardsList = [];
   late File _image;
-  late String _fileName;
-  late String _dropName;
-  late TimeOfDay _time;
-  late DateTime _date;
-  late Timestamp _dateTime;
+  String? _fileName;
+  String? _dropName;
+  TimeOfDay? _time;
+  DateTime? _date;
+  Timestamp? _dateTime;
 
   // Define variables to hold the latitude and longitude
   late double latitude;
@@ -116,11 +116,13 @@ class _NavigationExampleState extends State<NavigationExample> {
       }
 
       String fileName = "${DateTime.now().millisecondsSinceEpoch}.$extension";
-      _fileName = fileName;
       Reference firebaseStorageRef = _storage.ref().child(fileName);
+      _fileName = fileName;
       UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
-      await uploadTask.whenComplete(() => ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Image Uploaded"))));
+      await uploadTask.whenComplete(() => {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Image Uploaded"))),
+          });
     }
 
     Future getImage(BuildContext context) async {
@@ -145,11 +147,15 @@ class _NavigationExampleState extends State<NavigationExample> {
             if (currentPageIndex == 0) // Display only for the Home page
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height - 80,
                 child: Stack(
                   children: [
                     GoogleMap(
                       mapType: MapType.normal,
+                      minMaxZoomPreference: const MinMaxZoomPreference(15, 18),
+                      cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+                          northeast: const LatLng(33.657219, -117.823354),
+                          southwest: const LatLng(33.631015, -117.860349))),
                       initialCameraPosition: CameraPosition(
                         target: LatLng(latitude,
                             longitude), // Use latitude and longitude variables
@@ -213,24 +219,33 @@ class _NavigationExampleState extends State<NavigationExample> {
                               children: [
                                 Expanded(
                                   child: DateTimeField(
-                                    initialValue: DateTime.now(),
                                     format: dateFormat,
-                                    onShowPicker: (context, currentValue) async {
+                                    decoration: InputDecoration(
+                                      labelText: 'Enter Date',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onShowPicker:
+                                        (context, currentValue) async {
                                       final date = await showDatePicker(
                                           context: context,
                                           firstDate: DateTime(1900),
-                                          initialDate:
-                                              currentValue ?? DateTime.now(),
+                                          initialDate: currentValue,
                                           lastDate: DateTime(2100));
-                                          _date = date!;
-                                          return _date;
+                                      return date;
+                                    },
+                                    onChanged: (date) {
+                                      print("DATE FIELD SUBMITTED: $date");
+                                      _date = date;
                                     },
                                   ),
                                 ),
-                                SizedBox(width: 8.0),
+                                const SizedBox(width: 8.0),
                                 Expanded(
                                   child: DateTimeField(
-                                    initialValue: DateTime.now(),
+                                    decoration: InputDecoration(
+                                      labelText: 'Enter Time',
+                                      border: OutlineInputBorder(),
+                                    ),
                                     format: timeFormat,
                                     onShowPicker:
                                         (context, currentValue) async {
@@ -239,8 +254,11 @@ class _NavigationExampleState extends State<NavigationExample> {
                                         initialTime: TimeOfDay.fromDateTime(
                                             currentValue ?? DateTime.now()),
                                       );
-                                      _time = time!;
                                       return DateTimeField.convert(time);
+                                    },
+                                    onChanged: (time) {
+                                      print("TIME FIELD SUBMITTED: $time");
+                                      _time = TimeOfDay.fromDateTime(time!);
                                     },
                                   ),
                                 ),
@@ -266,12 +284,16 @@ class _NavigationExampleState extends State<NavigationExample> {
                               onPressed: () {
                                 // Handle button press
                                 // Add your logic to open an image picker or perform any action
-                                if (_date != null && _time != null && _dropName != null && latitude != null && longitude != null && _fileName != null) {
+                                if (_date != null &&
+                                    _time != null &&
+                                    _dropName != null) {
+                                  print("Date: $_date, Time: $_time");
                                   _dateTime = Timestamp.fromDate(
-                                      DateTimeField.combine(_date, _time));
-                                  create(
-                                      _dropName, latitude, longitude, _dateTime,
-                                      _fileName);
+                                      DateTimeField.combine(_date!, _time));
+                                  print("DateTime = $_dateTime");
+                                  uploadPic(context, _image);
+                                  create(_dropName, latitude, longitude,
+                                      _dateTime, _fileName);
                                 }
                               },
                               child: Text(
@@ -292,7 +314,7 @@ class _NavigationExampleState extends State<NavigationExample> {
             if (currentPageIndex == 1) // Display only for the Map page
               SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height - 80,
                   child: GoogleMap(
                     gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
                       Factory<OneSequenceGestureRecognizer>(
@@ -300,6 +322,10 @@ class _NavigationExampleState extends State<NavigationExample> {
                     },
                     mapType: MapType.normal,
                     zoomControlsEnabled: false,
+                    minMaxZoomPreference: const MinMaxZoomPreference(15, 18),
+                    cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+                        northeast: const LatLng(33.657219, -117.823354),
+                        southwest: const LatLng(33.631015, -117.860349))),
                     initialCameraPosition: const CameraPosition(
                       target: currentLocation,
                       zoom: 16,
@@ -330,7 +356,12 @@ class _NavigationExampleState extends State<NavigationExample> {
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
+            if (currentPageIndex == 1) {
+              readAll();
+              clearStickerAfterDate();
+            }
             if (currentPageIndex == 2) {
+              readAll();
               updateCards();
             }
           });
@@ -359,13 +390,13 @@ class _NavigationExampleState extends State<NavigationExample> {
   }
 
   void create(
-      String id, double lat, double lon, Timestamp dateTime, String image) {
+      String? id, double lat, double lon, Timestamp? dateTime, String? image) {
     final DateTime now = DateTime.now();
     final sticker = <String, dynamic>{
       "id": id,
       "lat": lat,
       "lon": lon,
-      "dateTime": Timestamp.fromDate(DateTime.now()), // Use server timestamp
+      "dateTime": dateTime,
       "image": image,
     };
 
@@ -390,45 +421,58 @@ class _NavigationExampleState extends State<NavigationExample> {
   Future<void> updateCards() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection("drops").get();
+    cardsList.clear();
 
-    List<Card> cards = [];
+    Map<Card, Timestamp> cardTimestampMap =
+        {}; // Map to store Card and its corresponding timestamp
+
     for (var doc in snapshot.docs) {
       String documentId = getDocumentId(doc);
-      DateTime dateTime = getDateTime(doc).toDate();
+      Timestamp timestamp = getDateTime(doc);
       String imageName = getImageName(doc);
-      // Formatting date and time
-      String formattedDateTime = DateFormat.yMMMd().add_jms().format(dateTime);
 
-      // Creating a Card for each document
-      if (documentId != 'Error') {
-        print("Grabbed Image with name:$imageName");
+      // Check if timestamp is not equal to the specified date
+      if (timestamp.seconds != 32503681148) {
+        // Formatting date and time
+        String formattedDateTime =
+            DateFormat.yMMMd().add_jms().format(timestamp.toDate());
 
-        String? downloadURL = await downloadImage(imageName);
-        Card card = Card(
-          child: ListTile(
-            leading: downloadURL != null
-                ? Image.network(
-                    downloadURL,
-                    width: 50.0, // Set the width as needed
-                    height: 50.0, // Set the height as needed
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/images/petr.png', // Replace with a placeholder image
-                    width: 50.0,
-                    height: 50.0,
-                    fit: BoxFit.cover,
-                  ),
-            title: Text('Petr Name: $documentId'),
-            subtitle: Text('Date and Time: $formattedDateTime'),
-          ),
-        );
+        // Creating a Card for each document
+        if (documentId != 'Error') {
+          print("Grabbed Image with name:$imageName");
 
-        cards.add(card); // Add the card to the list
+          String? downloadURL = await downloadImage(imageName);
+          Card card = Card(
+            child: ListTile(
+              leading: downloadURL != null
+                  ? Image.network(
+                      downloadURL,
+                      width: 50.0, // Set the width as needed
+                      height: 50.0, // Set the height as needed
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/petr.png', // Replace with a placeholder image
+                      width: 50.0,
+                      height: 50.0,
+                      fit: BoxFit.cover,
+                    ),
+              title: Text('Petr Name: $documentId'),
+              subtitle: Text('Date and Time: $formattedDateTime'),
+            ),
+          );
+
+          cardTimestampMap[card] = timestamp;
+        }
       }
     }
+
+    // Sort the cards list by timestamp in ascending order
+    List<Card> sortedCards = cardTimestampMap.keys.toList()
+      ..sort((a, b) => cardTimestampMap[a]!.compareTo(cardTimestampMap[b]!));
+
     setState(() {
-      cardsList = cards; // Update the state with the new list of cards
+      cardsList = sortedCards;
     });
   }
 
@@ -444,7 +488,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         DateTime currentDate = DateTime.now();
 
         if (currentDate.isAfter(dateTime)) {
-          _add(documentId, latitude, longitude);
+          _add(documentId, latitude, longitude, dateTime);
         }
       }
     });
@@ -570,7 +614,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     return Timestamp.fromDate(DateTime.now());
   }
 
-  void _add(id, lat, lon) {
+  void _add(id, lat, lon, dateTime) {
     var markerIdVal = id;
     final MarkerId markerId = MarkerId(markerIdVal);
 
@@ -581,7 +625,9 @@ class _NavigationExampleState extends State<NavigationExample> {
         lat,
         lon,
       ),
-      infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      infoWindow: InfoWindow(
+          title: markerIdVal,
+          snippet: DateFormat.jm().format(dateTime).toString()),
       onTap: () {},
     );
 
