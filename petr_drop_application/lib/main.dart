@@ -83,6 +83,11 @@ class _NavigationExampleState extends State<NavigationExample> {
   bool _isLoading = false;
   List<Card> cardsList = [];
   late File _image;
+  late String _fileName;
+  late String _dropName;
+  late TimeOfDay _time;
+  late DateTime _date;
+  late Timestamp _dateTime;
 
   // Define variables to hold the latitude and longitude
   late double latitude;
@@ -111,6 +116,7 @@ class _NavigationExampleState extends State<NavigationExample> {
       }
 
       String fileName = "${DateTime.now().millisecondsSinceEpoch}.$extension";
+      _fileName = fileName;
       Reference firebaseStorageRef = _storage.ref().child(fileName);
       UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
       await uploadTask.whenComplete(() => ScaffoldMessenger.of(context)
@@ -174,7 +180,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                       },
                     ),
                     Positioned(
-                      bottom: 80.0, // Adjusted position to raise it higher
+                      top: 50, // Adjusted position to raise it higher
                       left: 0,
                       right: 0,
                       child: Container(
@@ -190,7 +196,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                               ),
                               onChanged: (value) {
                                 // Handle name changes here
-                                print('Name changed: $value');
+                                _dropName = value;
                               },
                             ),
                             SizedBox(height: 8.0),
@@ -209,13 +215,15 @@ class _NavigationExampleState extends State<NavigationExample> {
                                   child: DateTimeField(
                                     initialValue: DateTime.now(),
                                     format: dateFormat,
-                                    onShowPicker: (context, currentValue) {
-                                      return showDatePicker(
+                                    onShowPicker: (context, currentValue) async {
+                                      final date = await showDatePicker(
                                           context: context,
                                           firstDate: DateTime(1900),
                                           initialDate:
                                               currentValue ?? DateTime.now(),
                                           lastDate: DateTime(2100));
+                                          _date = date!;
+                                          return _date;
                                     },
                                   ),
                                 ),
@@ -231,11 +239,48 @@ class _NavigationExampleState extends State<NavigationExample> {
                                         initialTime: TimeOfDay.fromDateTime(
                                             currentValue ?? DateTime.now()),
                                       );
+                                      _time = time!;
                                       return DateTimeField.convert(time);
                                     },
                                   ),
                                 ),
                               ],
+                            ),
+                            SizedBox(height: 8.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Handle button press
+                                // Add your logic to open an image picker or perform any action
+                                getImage(context);
+                              },
+                              child: Text(
+                                'Add Image',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Handle button press
+                                // Add your logic to open an image picker or perform any action
+                                if (_date != null && _time != null && _dropName != null && latitude != null && longitude != null && _fileName != null) {
+                                  _dateTime = Timestamp.fromDate(
+                                      DateTimeField.combine(_date, _time));
+                                  create(
+                                      _dropName, latitude, longitude, _dateTime,
+                                      _fileName);
+                                }
+                              },
+                              child: Text(
+                                'Create Drop',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ],
                         ),
