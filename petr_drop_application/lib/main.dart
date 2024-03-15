@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:custom_marker/marker_icon.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -100,7 +101,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   void initState() {
     super.initState();
     _firestore = FirebaseFirestore.instance; // Initialize FirebaseFirestore
-    addCustomIcon();
+    readAll();
     // Initialize latitude and longitude with default values
     latitude = currentLocation.latitude;
     longitude = currentLocation.longitude;
@@ -133,11 +134,10 @@ class _NavigationExampleState extends State<NavigationExample> {
 
       setState(() {
         _image = file;
-        print("Image Path ${file.path}");
+        log("Image Path ${file.path}");
       });
     }
 
-    readAll();
     clearStickerAfterDate();
     final ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -158,7 +158,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                           northeast: const LatLng(33.657219, -117.823354),
                           southwest: const LatLng(33.631015, -117.860349))),
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(latitude,
+                        target: LatLng(33.648209,
                             longitude), // Use latitude and longitude variables
                         zoom: 16,
                       ),
@@ -168,7 +168,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                       markers: {
                         Marker(
                           onTap: () {
-                            print('Tapped');
+                            log('Tapped');
                           },
                           draggable: true,
                           markerId: MarkerId('Marker'),
@@ -180,8 +180,8 @@ class _NavigationExampleState extends State<NavigationExample> {
                               latitude = newPosition.latitude;
                               longitude = newPosition.longitude;
                             });
-                            print(newPosition.latitude);
-                            print(newPosition.longitude);
+                            log(newPosition.latitude.toString());
+                            log(newPosition.longitude.toString());
                           }),
                         ),
                       },
@@ -235,7 +235,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                                       return date;
                                     },
                                     onChanged: (date) {
-                                      print("DATE FIELD SUBMITTED: $date");
+                                      log("DATE FIELD SUBMITTED: $date");
                                       _date = date;
                                     },
                                   ),
@@ -258,7 +258,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                                       return DateTimeField.convert(time);
                                     },
                                     onChanged: (time) {
-                                      print("TIME FIELD SUBMITTED: $time");
+                                      log("TIME FIELD SUBMITTED: $time");
                                       _time = TimeOfDay.fromDateTime(time!);
                                     },
                                   ),
@@ -288,10 +288,10 @@ class _NavigationExampleState extends State<NavigationExample> {
                                 if (_date != null &&
                                     _time != null &&
                                     _dropName != null) {
-                                  print("Date: $_date, Time: $_time");
+                                  log("Date: $_date, Time: $_time");
                                   _dateTime = Timestamp.fromDate(
                                       DateTimeField.combine(_date!, _time));
-                                  print("DateTime = $_dateTime");
+                                  log("DateTime = $_dateTime");
                                   uploadPic(context, _image);
                                   create(_dropName, latitude, longitude,
                                       _dateTime, _fileName);
@@ -410,10 +410,10 @@ class _NavigationExampleState extends State<NavigationExample> {
     try {
       String downloadURL =
           await FirebaseStorage.instance.ref().child(filename).getDownloadURL();
-      print("downloadUrl = $downloadURL");
+      log("downloadUrl = $downloadURL");
       return downloadURL;
     } on FirebaseException catch (e) {
-      print('Error downloading image: $e');
+      log('Error downloading image: $e');
       // Handle the error appropriately
       return null;
     }
@@ -440,7 +440,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
         // Creating a Card for each document
         if (documentId != 'Error') {
-          print("Grabbed Image with name:$imageName");
+          log("Grabbed Image with name:$imageName");
 
           String? downloadURL = await downloadImage(imageName);
           Card card = Card(
@@ -482,14 +482,11 @@ class _NavigationExampleState extends State<NavigationExample> {
       markers.clear();
       for (var doc in event.docs) {
         //log("${doc.id} => ${doc.data()}");
-        String documentId = getDocumentId(doc);
-        double latitude = getLatitude(doc);
-        double longitude = getLongitude(doc);
         DateTime dateTime = getDateTime(doc).toDate();
         DateTime currentDate = DateTime.now();
 
         if (currentDate.isAfter(dateTime)) {
-          _add(documentId, latitude, longitude, dateTime);
+          _add(doc);
         }
       }
     });
@@ -519,9 +516,9 @@ class _NavigationExampleState extends State<NavigationExample> {
       // Delete the file
       await firebaseStorageRef.delete();
 
-      print('File $filename deleted successfully from Firebase Storage.');
+      log('File $filename deleted successfully from Firebase Storage.');
     } catch (e) {
-      print('Error deleting file $filename: $e');
+      log('Error deleting file $filename: $e');
       // Handle the error appropriately
     }
   }
@@ -575,7 +572,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
     if (data != null && data.containsKey('image')) {
       var image = data['image'] as String;
-      print("Image Name Grabbed:  $image");
+      log("Image Name Grabbed:  $image");
       return image;
     }
 
@@ -615,21 +612,31 @@ class _NavigationExampleState extends State<NavigationExample> {
     return Timestamp.fromDate(DateTime.now());
   }
 
-  void _add(id, lat, lon, dateTime) {
-    var markerIdVal = id;
+  Future<void> _add(doc) async {
+    String markerIdVal = getDocumentId(doc);
+    double lat = getLatitude(doc);
+    double lon = getLongitude(doc);
+    DateTime dateTime = getDateTime(doc).toDate();
     final MarkerId markerId = MarkerId(markerIdVal);
+    String imageName = getImageName(doc);
+    String? imageURL = await downloadImage(imageName);
 
     // creating a new MARKER
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(
-        lat,
+        lat - 0.0002,
         lon,
       ),
       infoWindow: InfoWindow(
           title: markerIdVal,
           snippet: DateFormat.jm().format(dateTime).toString()),
       onTap: () {},
+      icon: await MarkerIcon.downloadResizePictureCircle(imageURL!,
+          size: 150,
+          addBorder: true,
+          borderColor: Colors.white,
+          borderSize: 15),
     );
 
     setState(() {

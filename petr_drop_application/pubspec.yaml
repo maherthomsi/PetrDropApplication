@@ -42,6 +42,9 @@ dependencies:
   http: ^1.1.0
   flutter_inappwebview: ^6.0.0
   intl: ">=0.17.0 <1.0.0"
+  custom_marker:
+    git:
+      url: https://github.com/mmolaei7878/custom_marker.git
   datetime_picker_formfield:
     git:
       url: https://github.com/jifalops/datetime_picker_formfield.git
